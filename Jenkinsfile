@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout SCM') {
             steps {
-                checkout ([$class: 'GitSCM', branches: [[$name: '*/master']], userRemoteConfigs: [[$url: 'https://github.com/lokeshb003/updated-portfolio.git']]])
+                checkout ([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: 'https://github.com/lokeshb003/updated-portfolio.git']]])
             }
         }
         stage('Install Required Packages') {
