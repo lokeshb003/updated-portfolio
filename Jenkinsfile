@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'localhost:5000/new-portfolio:latest'
-        DOCKER_IMAGEHUB = 'lokeshb003/new-portfolio:latest'
+        DOCKER_IMAGE_HUB = 'lokeshb003/new-portfolio:latest'
     }
     stages {
         stage('Checkout SCM') {
@@ -57,16 +57,18 @@ pipeline {
             }
         }
         stage('Deploy the Container') {
-            script {
-                def remote = [:]
-                remote.name = 'root'
-                remote.host = `${SSH_HOST}`
-                remote.user = `${SSH_USER}`
-                remote.password = `${SSH_PASS}`
-                remote.allowAnyHosts = true
-                stage('Remote SSH') {
-                    sshCommand remote: remote, command: "docker pull lokeshb003/new-portfolio:latest"
-                    sshCommand remote: remote, command: "docker run -d --name new-portfolio -p 3070:3000 lokeshb003/new-portfolio:latest"
+            steps {
+                script {
+                    def remote = [:]
+                    remote.name = 'root'
+                    remote.host = `${SSH_HOST}`
+                    remote.user = `${SSH_USER}`
+                    remote.password = `${SSH_PASS}`
+                    remote.allowAnyHosts = true
+                    stage('Remote SSH') {
+                        sshCommand remote: remote, command: "docker pull lokeshb003/new-portfolio:latest"
+                        sshCommand remote: remote, command: "docker run -d --name new-portfolio -p 3070:3000 lokeshb003/new-portfolio:latest"
+                    }
                 }
             }
         }
