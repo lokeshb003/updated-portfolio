@@ -15,11 +15,6 @@ pipeline {
                 sh 'npm install --save'
             }
         }
-        stage('Export JAVA_HOME') {
-            steps {
-                sh 'export JAVA_HOME=/root/sonar-scannner-4.8.0.2856-linux/jre/java'
-            }
-        }
         stage('SonarQube Scanner SAST Test') {
             steps {
                 sh 'sonar-scanner -Dsonar.projectKey=Updated-portfolio -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqp_8e041fc788b7122b5c82b98d6973679a55329c78'
