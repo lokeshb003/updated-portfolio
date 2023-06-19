@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker login -u `${DOCKER_USER}` -p `${DOCKER_PASS}`'
+                sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
                 script {
                     def image_build = docker.build(`${DOCKER_IMAGE}`)
                     image_build.push()
@@ -39,7 +39,7 @@ pipeline {
         stage('Test the Docker Image') {
             steps {
 
-                sh 'docker run -d test-image-1 -p 3050:3000 `${DOCKER_IMAGE}`'
+                sh 'docker run -d test-image-1 -p 3050:3000 ${DOCKER_IMAGE}'
                 sh 'curl localhost:3050'
                 sh 'sleep 500'
                 sh 'docker stop test-image-1 && docker rm test-image-1' 
@@ -48,7 +48,7 @@ pipeline {
         }
         stage('Image Scan with Trivy') {
             steps {
-                sh 'docker run --rm aquasec/trivy trivy scan `${DOCKER_IMAGE}`'
+                sh 'docker run --rm aquasec/trivy trivy scan ${DOCKER_IMAGE}'
             }
         }
         stage('OWASP Dependency Check') {
