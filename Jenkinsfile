@@ -29,9 +29,9 @@ pipeline {
             steps {
                 sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
                 script {
-                    def image_build = docker.build(`${DOCKER_IMAGE}`)
+                    def image_build = docker.build('${DOCKER_IMAGE}')
                     image_build.push()
-                    def image_dockerhub = docker.build(`${DOCKER_IMAGE_HUB}`)
+                    def image_dockerhub = docker.build('${DOCKER_IMAGE_HUB}')
                     image_dockerhub.push()
                 }
             }
@@ -61,9 +61,9 @@ pipeline {
                 script {
                     def remote = [:]
                     remote.name = 'root'
-                    remote.host = `${SSH_HOST}`
-                    remote.user = `${SSH_USER}`
-                    remote.password = `${SSH_PASS}`
+                    remote.host = '${SSH_HOST}'
+                    remote.user = '${SSH_USER}'
+                    remote.password = '${SSH_PASS}'
                     remote.allowAnyHosts = true
                     stage('Remote SSH') {
                         sshCommand remote: remote, command: "docker pull lokeshb003/new-portfolio:latest"
