@@ -10,11 +10,6 @@ pipeline {
                 checkout ([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: 'https://github.com/lokeshb003/updated-portfolio.git']]])
             }
         }
-        stage('Install Required Packages') {
-            steps {
-                sh 'apt update && apt install nodejs npm docker.io -y'
-            }
-        }
         stage('Install Node modules') {
             steps {
                 sh 'npm install --save'
