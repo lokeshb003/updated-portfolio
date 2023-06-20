@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Install Node modules') {
             steps {
-                sh 'npm install --save'
+                sh 'npm install'
             }
         }
         stage('OWASP Dependency Check') {
