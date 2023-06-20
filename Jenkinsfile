@@ -32,7 +32,7 @@ pipeline {
         stage('Test the Docker Image') {
             steps {
 
-                sh 'docker run -d test-image-1 -p 3050:3000 ${DOCKER_IMAGE}'
+                sh 'docker run -d --name=test-image-1 -p 3050:3000 ${DOCKER_IMAGE}'
                 sh 'curl localhost:3050'
                 sh 'sleep 500'
                 sh 'docker stop test-image-1 && docker rm test-image-1' 
