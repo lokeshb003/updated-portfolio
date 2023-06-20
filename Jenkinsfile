@@ -56,7 +56,8 @@ pipeline {
                     def remoteUser = '${SSH_USER}'
                     def remoteCommand = 'docker run -d -p 5050:3000 ${DOCKER_IMAGE_HUB}'
                     sshCommand remote: remoteServer,user: remoteUser,credentialsId: sshCredentials,command: remoteCommand
+                }
+            }
         }
-      }
     }
 }
