@@ -23,12 +23,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
-                script {
-                    def image_build = docker.build('${DOCKER_IMAGE}')
-                    image_build.push()
-                    def image_dockerhub = docker.build('${DOCKER_IMAGE_HUB}')
-                    image_dockerhub.push()
-                }
+                sh 'docker build -t ${DOCKER_IMAGE} .'
+                sh 'docker push ${DOCKER_IMAGE}'
+                sh 'docker build -t ${DOCKER_IMAGE_HUB} .'
+                sh 'docker push ${DOCKER_IMAGE_HUB}'
             }
         }
         stage('Test the Docker Image') {
