@@ -1,8 +1,7 @@
 FROM ubuntu:latest
 WORKDIR /root
-RUN apt update && apt install nodejs npm -y
+RUN apk update && apk add nodejs npm
 COPY . .
-RUN npm cache clean --force
-RUN npm install --save
+RUN npm install
 EXPOSE 3000
 CMD ["npm","start"]
