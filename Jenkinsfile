@@ -27,6 +27,17 @@ pipeline {
                 sh 'docker push ${DOCKER_IMAGE_HUB}'
             }
         }
+        stage('Test the Docker Image') {
+            steps {
+
+                sh 'docker run -d --name=test-image -p 3000:3000 ${DOCKER_IMAGE_HUB}'
+                sh 'sleep 500'
+                sh 'curl localhost:3050'
+                sh 'sleep 500'
+                sh 'docker stop test-image && docker rm test-image' 
+            }
+
+        }
         stage('Image Scan with Trivy') {
             steps {
                 sh 'docker run --rm aquasec/trivy image ${DOCKER_IMAGE_HUB}'
@@ -37,21 +48,15 @@ pipeline {
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        stage('Deploy the Container') {
+        stage('SSH and Execute Commands') {
             steps {
                 script {
-                    def remote = [:]
-                    remote.name = 'root'
-                    remote.host = '${SSH_HOST}'
-                    remote.user = '${SSH_USER}'
-                    remote.password = '${SSH_PASS}'
-                    remote.allowAnyHosts = true
-                    stage('Remote SSH') {
-                        sshCommand remote: remote, command: "docker pull lokeshb003/new-portfolio:latest"
-                        sshCommand remote: remote, command: "docker run -d --name new-portfolio -p 3070:3000 lokeshb003/new-portfolio:latest"
-                    }
-                }
-            }
+                    def sshCredentials = credentials('ssh-pass-server')
+                    def remoteServer = '${SSH_SERVER}'
+                    def remoteUser = '${SSH_USER}'
+                    def remoteCommand = 'docker run -d -p 5050:3000 ${DOCKER_IMAGE_HUB}'
+                    sshCommand remote: remoteServer,user: remoteUser,credentialsId: sshCredentials,command: remoteCommand
         }
+      }
     }
 }
