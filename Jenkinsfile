@@ -56,11 +56,6 @@ pipeline {
                 sh 'docker run --rm aquasec/trivy image ${DOCKER_IMAGE_HUB}'
             }
         }
-        stage('OWASP Dependency Check') {
-            steps {
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
         stage('SSH and Execute Commands') {
             steps {
                 script {
