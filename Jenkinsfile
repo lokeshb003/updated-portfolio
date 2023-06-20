@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Image Scan with Trivy') {
             steps {
-                sh 'docker run --rm aquasec/trivy trivy image ${DOCKER_IMAGE}'
+                sh 'docker run --rm aquasec/trivy image ${DOCKER_IMAGE_HUB}'
             }
         }
         stage('OWASP Dependency Check') {
