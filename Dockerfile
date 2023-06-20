@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM alpine:latest
 WORKDIR /root
 RUN apk update && apk add nodejs npm
 COPY . .
