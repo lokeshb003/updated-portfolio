@@ -15,9 +15,22 @@ pipeline {
                 sh 'npm install --save'
             }
         }
+        stage('OWASP Dependency Check') {
+            steps {
+                // Run OWASP Dependency Check
+                sh 'npm audit --json > dependency-check-report.json'
+            }
+        }
         stage('SonarQube Scanner SAST Test') {
             steps {
                 sh '/var/lib/jenkins/sonar-scanner-4.8.0.2856-linux/bin/sonar-scanner -Dsonar.projectKey=Updated-portfolio -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqp_8e041fc788b7122b5c82b98d6973679a55329c78'
+            }
+        }
+        stage('Publish Results') {
+            steps {
+                // Archive dependency check report as a build artifact
+                archiveArtifacts artifacts: 'dependency-check-report.json', fingerprint: true
+                publishHTML(target: [allowMissing: false,alwaysLinkToLastBuild: true,keepAll: true,reportDir: '.',reportFiles: 'dependency-check-report.json',reportName: 'OWASP Dependency Check Report'])
             }
         }
         stage('Build Docker Image') {
@@ -32,7 +45,7 @@ pipeline {
 
                 sh 'docker run -d --name=test-image -p 3000:3000 ${DOCKER_IMAGE_HUB}'
                 sh 'sleep 60s'
-                sh 'curl localhost:3050'
+                sh 'curl localhost:3000'
                 sh 'sleep 60s'
                 sh 'docker stop test-image && docker rm test-image' 
             }
