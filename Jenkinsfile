@@ -23,8 +23,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
-                sh 'docker build -t ${DOCKER_IMAGE} .'
-                sh 'docker push ${DOCKER_IMAGE}'
                 sh 'docker build -t ${DOCKER_IMAGE_HUB} .'
                 sh 'docker push ${DOCKER_IMAGE_HUB}'
             }
@@ -32,7 +30,7 @@ pipeline {
         stage('Test the Docker Image') {
             steps {
 
-                sh 'docker run -d --name=test-image -p 3000:3000 ${DOCKER_IMAGE}'
+                sh 'docker run -d --name=test-image -p 3000:3000 ${DOCKER_IMAGE_HUB}'
                 sh 'sleep 3000'
                 sh 'curl localhost:3050'
                 sh 'sleep 500'
