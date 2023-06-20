@@ -31,9 +31,9 @@ pipeline {
             steps {
 
                 sh 'docker run -d --name=test-image -p 3000:3000 ${DOCKER_IMAGE_HUB}'
-                sh 'sleep 500'
+                sh 'sleep 60s'
                 sh 'curl localhost:3050'
-                sh 'sleep 500'
+                sh 'sleep 60s'
                 sh 'docker stop test-image && docker rm test-image' 
             }
 
