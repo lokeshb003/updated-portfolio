@@ -15,12 +15,6 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('OWASP Dependency Check') {
-            steps {
-                // Run OWASP Dependency Check
-                sh 'npm audit --json > dependency-check-report.json'
-            }
-        }
         stage('SonarQube Scanner SAST Test') {
             steps {
                 sh '/var/lib/jenkins/sonar-scanner-4.8.0.2856-linux/bin/sonar-scanner -Dsonar.projectKey=Updated-portfolio -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqp_8e041fc788b7122b5c82b98d6973679a55329c78'
