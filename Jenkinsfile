@@ -3,6 +3,9 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'localhost:5000/new-portfolio:latest'
         DOCKER_IMAGE_HUB = 'lokeshb003/new-portfolio:latest'
+        SSH_REMOTE = '${SSH_SERVER}'
+        SSH_USER = 'root'
+        SSH_PASS = '${SSH_SERVER_PASS}'
     }
     stages {
         stage('Checkout SCM') {
@@ -52,13 +55,7 @@ pipeline {
         }
         stage('SSH and Execute Commands') {
             steps {
-                script {
-                    def sshCredentials = credentials('ssh-pass-server')
-                    def remoteServer = '${SSH_SERVER}'
-                    def remoteUser = '${SSH_USER}'
-                    def remoteCommand = 'docker run -d -p 5050:3000 ${DOCKER_IMAGE_HUB}'
-                    sshCommand remote: remoteServer,user: remoteUser,credentialsId: sshCredentials,command: remoteCommand
-                }
+                sshCommand remote: SSH_REMOTE, user: SSH_USER, password: SSH_PASS,command: 'docker run -d -p 5050:3000 lokeshb003/new-portfolio:latest'
             }
         }
     }
