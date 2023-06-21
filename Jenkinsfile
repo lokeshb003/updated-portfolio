@@ -55,9 +55,7 @@ pipeline {
         }
         stage('SSH and Execute Commands') {
             steps {
-                script {
-                    sshCommand remote: SSH_REMOTE, user: SSH_USER, password: SSH_PASS,command: 'docker run -d -p 5050:3000 lokeshb003/new-portfolio:latest'
-                }
+                sh "sshpass -p '$SSH_PASS' ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_REMOTE 'docker pull $DOCKER_IMAGE_HUB && docker run -d -p 5050:3000 $DOCKER_IMAGE_HUB'"
             }
         }
     }
