@@ -3,9 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'localhost:5000/new-portfolio:latest'
         DOCKER_IMAGE_HUB = 'lokeshb003/new-portfolio:latest'
-        SSH_REMOTE = '${SSH_SERVER}'
         SSH_USER = 'root'
-        SSH_PASS = '${SSH_SERVER_PASS}'
     }
     stages {
         stage('Checkout SCM') {
@@ -55,7 +53,7 @@ pipeline {
         }
         stage('SSH and Execute Commands') {
             steps {
-                sh "sshpass -p '$SSH_PASS' ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_REMOTE 'docker pull $DOCKER_IMAGE_HUB && docker run -d -p 5050:3000 $DOCKER_IMAGE_HUB'"
+                sh "sshpass -p '$SSH_SERVER_PASS' ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER 'docker pull $DOCKER_IMAGE_HUB && docker run -d -p 5050:3000 $DOCKER_IMAGE_HUB'"
             }
         }
     }
