@@ -55,7 +55,9 @@ pipeline {
         }
         stage('SSH and Execute Commands') {
             steps {
-                sshCommand remote: SSH_REMOTE, user: SSH_USER, password: SSH_PASS,command: 'docker run -d -p 5050:3000 lokeshb003/new-portfolio:latest'
+                script {
+                    sshCommand remote: SSH_REMOTE, user: SSH_USER, password: SSH_PASS,command: 'docker run -d -p 5050:3000 lokeshb003/new-portfolio:latest'
+                }
             }
         }
     }
