@@ -1,33 +1,17 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: updated-portfolio-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: updated-portfolio
-  template:
-    metadata:
-      labels:
-        app: updated-portfolio
-    spec:
-      containers:
-      - name: updated-portfolio
-        image: ghcr.io/lokeshb003/updated-portfolio
-        ports:
-        - containerPort: 3000  # Match the EXPOSE port in your Dockerfile
+name: react-app
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: updated-portfolio-service
-spec:
-  selector:
-    app: updated-portfolio
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000  # Match the EXPOSE port in your Dockerfile
-  type: LoadBalancer
+build:
+  frontend:
+    context: .
+    dockerfile: Dockerfile
+
+deploy:
+  - helm upgrade --install my-react-app chart --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE}
+
+dev:
+  frontend:
+    command: ["npm", "start"]
+    sync:
+      - .:/root
+    forward:
+      - 3000:3000
