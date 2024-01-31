@@ -1,12 +1,7 @@
 name: react-app
 
-build:
-  frontend:
-    context: .
-    dockerfile: Dockerfile
-
 deploy:
-  - helm upgrade --install my-react-app chart --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE}
+  - kubectl apply -f deployment.yaml
 
 dev:
   frontend:
