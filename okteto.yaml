@@ -1,6 +1,33 @@
-name: updated-portfolio
-image: ghcr.io/lokeshb003/updated-portfolio
-command: ["npm", "start"]
-workdir: /root
-forward:
-  - 3000:3000
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: updated-portfolio-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: updated-portfolio
+  template:
+    metadata:
+      labels:
+        app: updated-portfolio
+    spec:
+      containers:
+      - name: updated-portfolio
+        image: ghcr.io/lokeshb003/updated-portfolio
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: updated-portfolio-service
+spec:
+  selector:
+    app: updated-portfolio
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
